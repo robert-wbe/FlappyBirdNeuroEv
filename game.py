@@ -103,9 +103,17 @@ def drawNeuralNetwork(screen: pygame.Surface, network: nn.NeuralNetwork, x: int,
         pygame.draw.circle(screen, (227-inp*27, 152-inp*102, 227-inp*27), (x+width/(size+1), y+(j+1)*height/(shape[0]+1)), NODE_RADIUS, width=3)
 
     for i, layer in enumerate(network.layers):
+        for j, inWeights in enumerate(layer.weights):
+            for k, weight in enumerate(inWeights):
+                inPos = (x+(i+1)*width/(size+1), y+(k+1)*height/(shape[i]+1))
+                outPos = (x+(i+2)*width/(size+1), y+(j+1)*height/(shape[i+1]+1))
+                weightColor = (50, 50, 200) if weight >= 0 else (200, 50, 50)
+                pygame.draw.line(screen, weightColor, inPos, outPos, width=3)
+
         for j, out in enumerate(layer.output):
             pygame.draw.circle(screen, (255, 255, 255), (x+(i+2)*width/(size+1), y+(j+1)*height/(shape[i+1]+1)), NODE_RADIUS)
             pygame.draw.circle(screen, (255*(1-out), 255-out*205, 255), (x+(i+2)*width/(size+1), y+(j+1)*height/(shape[i+1]+1)), NODE_RADIUS, width=3)
+    
 
 class FlappyBirdAIGame:
     FPS = 60
